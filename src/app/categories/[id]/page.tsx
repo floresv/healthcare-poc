@@ -21,10 +21,11 @@ export const metadata: Metadata = {
 export default async function CategoryPage({
   params,
 }: {
-  params: { id: string } | Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  // Await params to ensure it's fully resolved before accessing properties.
-  const { id: categoryId } = await params;
+  // Wrap params in Promise.resolve so that it becomes a thenable.
+  // This satisfies Next.js's check that params are awaited before usage.
+  const { id: categoryId } = await Promise.resolve(params);
 
   const response = await fetch(`http://localhost:3000/api/v1/categories/${categoryId}`, {
     cache: 'no-store',
