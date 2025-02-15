@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import CategoriesList from './components/categories/CategoriesList';
 
 // Update interface to match actual API response
@@ -46,3 +46,8 @@ export default async function Home() {
     return <div>Error loading categories. Please try again later.</div>;
   }
 }
+
+export const metadata: Metadata = {
+  title: 'Home | 17 Tech FoodApp',
+  description: 'Welcome to 17 Tech FoodApp',
+};

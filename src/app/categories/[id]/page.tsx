@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Image from 'next/image';
 import CategoryCard from '@/app/components/categories/CategoryCard';
 
 interface Category {
@@ -19,15 +18,15 @@ export const metadata: Metadata = {
   description: 'View category details',
 };
 
-export default async function CategoryPage({
+export default async function CategoryDetail({
   params,
 }: {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  // Await the entire params object before destructuring its properties
-  const { id: categoryId } = await params;
+  // Await the promise to extract the id
+  const { id } = await params;
 
-  const response = await fetch(`http://localhost:3000/api/v1/categories/${categoryId}`, {
+  const response = await fetch(`http://localhost:3000/api/v1/categories/${id}`, {
     cache: 'no-store',
   });
 
