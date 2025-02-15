@@ -19,3 +19,8 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Add hover style for category links */
+.category-link:hover {
+  color: black;
+}
