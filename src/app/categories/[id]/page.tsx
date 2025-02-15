@@ -18,16 +18,15 @@ export const metadata: Metadata = {
   description: 'View category details',
 };
 
-export default async function CategoryPage({
+export default async function CategoryDetail({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  // Wrap params in Promise.resolve so that it becomes a thenable.
-  // This satisfies Next.js's check that params are awaited before usage.
-  const { id: categoryId } = await Promise.resolve(params);
+  // Await the promise to extract the id
+  const { id } = await params;
 
-  const response = await fetch(`http://localhost:3000/api/v1/categories/${categoryId}`, {
+  const response = await fetch(`http://localhost:3000/api/v1/categories/${id}`, {
     cache: 'no-store',
   });
 
