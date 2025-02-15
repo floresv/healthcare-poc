@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Image from 'next/image';
 import CategoryCard from '@/app/components/categories/CategoryCard';
 
 interface Category {
