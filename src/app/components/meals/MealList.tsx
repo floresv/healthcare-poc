@@ -24,13 +24,30 @@ export default function MealList({ categoryId }: MealListProps) {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  // Using API_ENDPOINT (exposed via next.config.js)
+  const apiEndpoint = process.env.API_ENDPOINT;
+
   useEffect(() => {
+    if (!apiEndpoint) {
+      console.error("API_ENDPOINT is not defined");
+      return;
+    }
+
     const fetchMeals = async () => {
       setLoading(true);
       try {
+        // Adjust the URL structure if needed. For example, if your API expects:
+        // http://localhost:3001/categories/1/meals?page=1
+        // then use that structure below.
         const response = await fetch(
-          `http://localhost:3000/api/v1/meals/?category_id=${categoryId}&page=${page}`
+          `${apiEndpoint}/meals/?category_id=${categoryId}&page=${page}`
         );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP error ${response.status}: ${errorText.substring(0, 200)}`);
+        }
+
         const data = await response.json();
         setMeals(data.meals);
       } catch (error) {
@@ -40,7 +57,7 @@ export default function MealList({ categoryId }: MealListProps) {
     };
 
     fetchMeals();
-  }, [categoryId, page]);
+  }, [apiEndpoint, categoryId, page]);
 
   return (
     <div className="mt-8">

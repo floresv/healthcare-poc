@@ -25,8 +25,8 @@ export default async function CategoryDetail({
 }) {
   // Await the promise to extract the id
   const { id } = await params;
-
-  const response = await fetch(`http://localhost:3000/api/v1/categories/${id}`, {
+  const apiUrl = process.env.API_ENDPOINT;
+  const response = await fetch(`${apiUrl}/categories/${id}`, {
     cache: 'no-store',
   });
 

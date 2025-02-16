@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -8,6 +10,9 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  env: {
+    API_ENDPOINT: process.env.API_ENDPOINT,
   },
 }
 

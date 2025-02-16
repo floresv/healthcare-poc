@@ -17,7 +17,9 @@ interface ApiResponse {
 // Make page component async to fetch data
 export default async function Home() {
   try {
-    const response = await fetch('http://localhost:3000/api/v1/categories/?page=1&per_page=10', {
+    // Use the API_ENDPOINT environment variable with a fallback
+    const apiUrl = process.env.API_ENDPOINT;
+    const response = await fetch(`${apiUrl}/categories/?page=1&per_page=10`, {
       cache: 'no-store', // Disable caching for real-time data
     });
     
@@ -29,7 +31,7 @@ export default async function Home() {
     const data: ApiResponse = await response.json();
     console.log('API response:', data); // For debugging
 
-    // Update null check for the new structure
+    // Check for valid categories data
     if (!data?.categories) {
       return <div>Error: No categories data available</div>;
     }
