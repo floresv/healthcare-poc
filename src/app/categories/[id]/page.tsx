@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import CategoryCard from '@/app/components/categories/CategoryCard';
-import MealList from '@/app/components/meals/MealList';
 
 interface Category {
   id: number;
