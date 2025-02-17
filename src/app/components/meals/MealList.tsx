@@ -15,6 +15,10 @@ interface Meal {
   };
 }
 
+interface CartItem extends Meal {
+  quantity: number;
+}
+
 interface MealListProps {
   categoryId: number;
 }
@@ -30,13 +34,13 @@ export default function MealList({ categoryId }: MealListProps) {
 
   // Add new function to handle adding items to cart
   const addToCart = (meal: Meal) => {
-    const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const existingItem = existingCart.find((item: any) => item.id === meal.id);
+    const existingCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[];
+    const existingItem = existingCart.find((item: CartItem) => item.id === meal.id);
 
-    let newCart;
+    let newCart: CartItem[];
     if (existingItem) {
       // If item exists, increment quantity
-      newCart = existingCart.map((item: any) => 
+      newCart = existingCart.map((item: CartItem) => 
         item.id === meal.id 
           ? { ...item, quantity: item.quantity + 1 }
           : item
