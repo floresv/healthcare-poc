@@ -23,9 +23,33 @@ export default function MealList({ categoryId }: MealListProps) {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Using API_ENDPOINT (exposed via next.config.js)
   const apiEndpoint = process.env.API_ENDPOINT;
+
+  // Add new function to handle adding items to cart
+  const addToCart = (meal: Meal) => {
+    const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingItem = existingCart.find((item: any) => item.id === meal.id);
+
+    let newCart;
+    if (existingItem) {
+      // If item exists, increment quantity
+      newCart = existingCart.map((item: any) => 
+        item.id === meal.id 
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    } else {
+      // If item doesn't exist, add it with quantity 1
+      newCart = [...existingCart, { ...meal, quantity: 1 }];
+    }
+
+    localStorage.setItem('cart', JSON.stringify(newCart));
+    // Optional: Add some visual feedback
+    alert(`Added ${meal.name} to cart`);
+  };
 
   useEffect(() => {
     if (!apiEndpoint) {
@@ -36,9 +60,7 @@ export default function MealList({ categoryId }: MealListProps) {
     const fetchMeals = async () => {
       setLoading(true);
       try {
-        // Adjust the URL structure if needed. For example, if your API expects:
-        // http://localhost:3001/categories/1/meals?page=1
-        // then use that structure below.
+        // Adjust the URL structure if needed.
         const response = await fetch(
           `${apiEndpoint}/meals/?category_id=${categoryId}&page=${page}`
         );
@@ -59,14 +81,28 @@ export default function MealList({ categoryId }: MealListProps) {
     fetchMeals();
   }, [apiEndpoint, categoryId, page]);
 
+  // Client-side filtering of meals based on the search term.
+  const filteredMeals = meals.filter((meal) =>
+    meal.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="mt-8">
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search meals..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded text-black"
+        />
+      </div>
       {loading ? (
         <div className="text-center">Loading...</div>
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {meals.map((meal) => (
+            {filteredMeals.map((meal) => (
               <div key={meal.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="relative h-48 group">
                   <Image
@@ -78,8 +114,8 @@ export default function MealList({ categoryId }: MealListProps) {
                   <button 
                     className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg 
                               hover:bg-gray-100 transition-colors duration-200 
-                              opacity-90 hover:opacity-100"
-                    onClick={() => {/* TODO: Add cart functionality */}}
+                              opacity-90 hover:opacity-100 cursor-pointer"
+                    onClick={() => addToCart(meal)}
                   >
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 

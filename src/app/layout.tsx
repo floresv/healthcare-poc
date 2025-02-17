@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NavBar from "../components/NavBar";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -28,10 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <header className="p-4 border-b">
-          <nav>
-            {/* Add your navigation content here */}
-            <h1 className="text-xl font-bold">17 Tech FoodApp</h1>
-          </nav>
+          <NavBar />
         </header>
 
         <main className="flex-1">
@@ -40,7 +38,6 @@ export default function RootLayout({
 
         <footer className="p-4 border-t">
           <div>
-            {/* Add your footer content here */}
             <p className="text-center text-gray-600">© 2024 17 Tech FoodApp. All rights reserved.</p>
           </div>
         </footer>

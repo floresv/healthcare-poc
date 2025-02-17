@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import CategoryCard from '@/app/components/categories/CategoryCard';
+import MealList from '@/app/components/meals/MealList';
 
 interface Category {
   id: number;
@@ -18,12 +19,12 @@ export const metadata: Metadata = {
   description: 'View category details',
 };
 
-export default async function CategoryDetail({
+export default async function CategoryPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string } | Promise<{ id: string }>;
 }) {
-  // Await the promise to extract the id
+  // Await the promise to extract the id.
   const { id } = await params;
   const apiUrl = process.env.API_ENDPOINT;
   const response = await fetch(`${apiUrl}/categories/${id}`, {
