@@ -21,9 +21,9 @@ export const metadata: Metadata = {
 export default async function CategoryPage({
   params,
 }: {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  // Await the promise to extract the id.
+  // Await params to ensure it's resolved before using its properties
   const { id } = await params;
   const apiUrl = process.env.API_ENDPOINT;
   const response = await fetch(`${apiUrl}/categories/${id}`, {
