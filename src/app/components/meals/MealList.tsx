@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { AiOutlineShoppingCart } from "react-icons/ai";
+
 
 interface Meal {
   id: number;
@@ -20,10 +22,28 @@ interface CartItem extends Meal {
 }
 
 interface MealListProps {
-  categoryId: number;
+  categoryId: string;
+  sortCriteria: 'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc';
 }
 
-export default function MealList({ categoryId }: MealListProps) {
+const sortMeals = (meals: Meal[], criteria: 'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc') => {
+  return meals.sort((a, b) => {
+    switch (criteria) {
+      case 'nameAsc':
+        return a.name.localeCompare(b.name);
+      case 'nameDesc':
+        return b.name.localeCompare(a.name);
+      case 'priceAsc':
+        return parseFloat(a.price) - parseFloat(b.price);
+      case 'priceDesc':
+        return parseFloat(b.price) - parseFloat(a.price);
+      default:
+        return 0;
+    }
+  });
+};
+
+export default function MealList({ categoryId, sortCriteria }: MealListProps) {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -32,14 +52,13 @@ export default function MealList({ categoryId }: MealListProps) {
   // Using API_ENDPOINT (exposed via next.config.js)
   const apiEndpoint = process.env.API_ENDPOINT;
 
-  // Add new function to handle adding items to cart
   const addToCart = (meal: Meal) => {
     const existingCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[];
     const existingItem = existingCart.find((item: CartItem) => item.id === meal.id);
 
     let newCart: CartItem[];
     if (existingItem) {
-      // If item exists, increment quantity
+      // If item exists, increment quantity and update total
       newCart = existingCart.map((item: CartItem) => 
         item.id === meal.id 
           ? { ...item, quantity: item.quantity + 1 }
@@ -51,6 +70,7 @@ export default function MealList({ categoryId }: MealListProps) {
     }
 
     localStorage.setItem('cart', JSON.stringify(newCart));
+
     // Optional: Add some visual feedback
     alert(`Added ${meal.name} to cart`);
   };
@@ -90,11 +110,13 @@ export default function MealList({ categoryId }: MealListProps) {
     meal.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const sortedMeals = sortMeals(filteredMeals, sortCriteria);
+
   return (
-    <div className="mt-8">
+    <div className="mt-8" style={{ marginTop: '16px' }}>
       <div className="mb-4">
         <input
-          type="text"
+          type="text" 
           placeholder="Search meals..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -106,7 +128,7 @@ export default function MealList({ categoryId }: MealListProps) {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredMeals.map((meal) => (
+            {sortedMeals.map((meal) => (
               <div key={meal.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="relative h-48 group">
                   <Image
@@ -121,20 +143,7 @@ export default function MealList({ categoryId }: MealListProps) {
                               opacity-90 hover:opacity-100 cursor-pointer"
                     onClick={() => addToCart(meal)}
                   >
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      strokeWidth={1.5} 
-                      stroke="currentColor" 
-                      className="w-6 h-6 text-gray-800"
-                    >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" 
-                      />
-                    </svg>
+                    <AiOutlineShoppingCart className="w-6 h-6 text-gray-800" />
                   </button>
                 </div>
                 <div className="p-4">
