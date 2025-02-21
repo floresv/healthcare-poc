@@ -13,6 +13,12 @@ Live demo: https://v0-new-project-46pmmeizfjb.vercel.app/
 
 ## Local development
 
+NOTE:
+Install node version 20 or higher
+run npm install
+You need to create a .env file with this variable:
+- API_ENDPOINT
+
 ```bash
 npm run dev
 # or

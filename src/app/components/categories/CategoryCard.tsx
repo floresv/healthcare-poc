@@ -1,12 +1,17 @@
+"use client";
 import Image from 'next/image';
 import { Category } from '@/types/category';
 import MealList from '../meals/MealList';
+import SortButtons from '../common/SortButtons';
+import { useState } from 'react';
 
 interface CategoryCardProps {
   category: Category;
 }
 
 export default function CategoryCard({ category }: CategoryCardProps) {
+  const [sortCriteria, setSortCriteria] = useState<'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc'>('nameAsc');
+
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       <div className="p-6">
@@ -23,7 +28,8 @@ export default function CategoryCard({ category }: CategoryCardProps) {
         <p className="text-gray-600 mt-4">
           {category.extStrCategoryDescription}
         </p>
-        <MealList categoryId={category.id} />
+        <SortButtons sortCriteria={sortCriteria} setSortCriteria={setSortCriteria} />
+        <MealList categoryId={category.id.toString()} sortCriteria={sortCriteria} />
       </div>
     </div>
   );
