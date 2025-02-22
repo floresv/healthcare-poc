@@ -1,18 +1,6 @@
 import type { Metadata } from 'next';
 import CategoriesList from './components/categories/CategoriesList';
-
-// Update interface to match actual API response
-interface Category {
-  id: number;
-  name: string;
-  extId: number;
-  extStrCategoryHumb: string;
-  extStrCategoryDescription: string;
-}
-
-interface ApiResponse {
-  categories: Category[];
-}
+import { CategoriesListProps } from '@/types/category';
 
 // Make page component async to fetch data
 export default async function Home() {
@@ -28,7 +16,7 @@ export default async function Home() {
       throw new Error(`API call failed: ${response.status}`);
     }
 
-    const data: ApiResponse = await response.json();
+    const data: CategoriesListProps = await response.json();
     console.log('API response:', data); // For debugging
 
     // Check for valid categories data
@@ -37,8 +25,11 @@ export default async function Home() {
     }
 
     return (
-      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+      <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold">Categories Food</h1>
+        </div>
+        <main className="flex flex-col gap-8 items-center sm:items-start">
           <CategoriesList categories={data.categories} />
         </main>
       </div>

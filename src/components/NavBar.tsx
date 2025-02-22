@@ -4,14 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { AiFillHome, AiOutlineUser, AiOutlineShoppingCart } from "react-icons/ai";
 import CartSummary from "../app/components/cart/CartSummary";
-;
+import { CartItem } from "@/types/cart";
 
-interface CartItem {
-  id: number;
-  name: string;
-  quantity: number;
-  price: number;
-}
 
 export default function NavBar() {
   const [showCart, setShowCart] = useState(false);

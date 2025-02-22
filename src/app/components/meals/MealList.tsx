@@ -3,28 +3,9 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { Meal, MealListProps } from '@/types/meal';
+import { CartItem } from '@/types/cart';
 
-
-interface Meal {
-  id: number;
-  name: string;
-  imageUrl: string;
-  price: string;
-  extStrMealThumb: string | null;
-  category: {
-    id: number;
-    name: string;
-  };
-}
-
-interface CartItem extends Meal {
-  quantity: number;
-}
-
-interface MealListProps {
-  categoryId: string;
-  sortCriteria: 'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc';
-}
 
 const sortMeals = (meals: Meal[], criteria: 'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc') => {
   return meals.sort((a, b) => {
@@ -58,15 +39,13 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
 
     let newCart: CartItem[];
     if (existingItem) {
-      // If item exists, increment quantity and update total
       newCart = existingCart.map((item: CartItem) => 
         item.id === meal.id 
-          ? { ...item, quantity: item.quantity + 1 }
+          ? { ...item, quantity: item.quantity + 1, priceCents: item.priceCents }
           : item
       );
     } else {
-      // If item doesn't exist, add it with quantity 1
-      newCart = [...existingCart, { ...meal, quantity: 1 }];
+      newCart = [...existingCart, { ...meal, quantity: 1, priceCents: meal.priceCents}];
     }
 
     localStorage.setItem('cart', JSON.stringify(newCart));
@@ -76,6 +55,9 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
   };
 
   useEffect(() => {
+    const sortBy = ["nameAsc", "nameDesc"].includes(sortCriteria) ? "name" : "price";
+    const sortDirection = ["nameAsc", "priceAsc"].includes(sortCriteria) ? "asc" : "desc";
+
     if (!apiEndpoint) {
       console.error("API_ENDPOINT is not defined");
       return;
@@ -84,9 +66,8 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
     const fetchMeals = async () => {
       setLoading(true);
       try {
-        // Adjust the URL structure if needed.
         const response = await fetch(
-          `${apiEndpoint}/meals/?category_id=${categoryId}&page=${page}`
+          `${apiEndpoint}/meals/?category_id=${categoryId}&page=${page}&sort_by=${sortBy}&direction=${sortDirection}`
         );
 
         if (!response.ok) {
@@ -103,7 +84,7 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
     };
 
     fetchMeals();
-  }, [apiEndpoint, categoryId, page]);
+  }, [apiEndpoint, categoryId, page, sortCriteria]);
 
   // Client-side filtering of meals based on the search term.
   const filteredMeals = meals.filter((meal) =>

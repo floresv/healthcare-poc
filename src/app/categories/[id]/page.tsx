@@ -1,17 +1,7 @@
 import { Metadata } from 'next';
 import CategoryCard from '@/app/components/categories/CategoryCard';
+import { ApiResponse } from '@/types/category';
 
-interface Category {
-  id: number;
-  name: string;
-  extId: number;
-  extStrCategoryHumb: string;
-  extStrCategoryDescription: string;
-}
-
-interface ApiResponse {
-  category: Category;
-}
 
 export const metadata: Metadata = {
   title: 'Category Details | 17 Tech FoodApp',
