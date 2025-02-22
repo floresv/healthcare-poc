@@ -1,15 +1,11 @@
 "use client";
 import Image from 'next/image';
-import { Category } from '@/types/category';
 import MealList from '../meals/MealList';
 import SortButtons from '../common/SortButtons';
 import { useState } from 'react';
+import { ApiResponse } from '@/types/category';
 
-interface CategoryCardProps {
-  category: Category;
-}
-
-export default function CategoryCard({ category }: CategoryCardProps) {
+export default function CategoryCard({ category }: ApiResponse) {
   const [sortCriteria, setSortCriteria] = useState<'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc'>('nameAsc');
 
   return (

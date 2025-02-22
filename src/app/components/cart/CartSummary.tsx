@@ -1,18 +1,5 @@
 import { FaRegTrashAlt } from "react-icons/fa";
-
-interface CartItem {
-  id: number;
-  name: string;
-  quantity: number;
-  price: number;
-}
-
-interface CartProps {
-  cart: CartItem[];
-  setCart: (cart: CartItem[]) => void;
-  showCart: boolean;
-  toggleCart: () => void;
-}
+import { CartProps } from "@/types/cart";
 
 export default function Cart({ cart, setCart, showCart, toggleCart }: CartProps) {
   const incrementQuantity = (index: number) => {
@@ -37,7 +24,7 @@ export default function Cart({ cart, setCart, showCart, toggleCart }: CartProps)
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
-  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
+  const totalPrice = cart.reduce((acc, item) => acc + (item.priceCents / 100) * item.quantity, 0).toFixed(2);
 
   return (
     showCart && (
@@ -49,7 +36,7 @@ export default function Cart({ cart, setCart, showCart, toggleCart }: CartProps)
                 <div key={item.id} className="flex justify-between items-center py-1 border-b last:border-0 text-black">
                   <div className="flex items-center space-x-2">
                     <span className="text-black">{item.name}</span>
-                    <span className="text-black">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="text-black">${((item.priceCents / 100) * item.quantity).toFixed(2)}</span>
                     <div className="flex items-center border rounded">
                       <button
                         onClick={() => incrementQuantity(index)}

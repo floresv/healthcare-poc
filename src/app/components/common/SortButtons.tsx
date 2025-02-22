@@ -1,9 +1,5 @@
 import { FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
-
-interface SortButtonsProps {
-  sortCriteria: 'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc';
-  setSortCriteria: (criteria: 'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc') => void;
-}
+import { SortButtonsProps } from "@/types/type";
 
 export default function SortButtons({ sortCriteria, setSortCriteria }: SortButtonsProps) {
   return (

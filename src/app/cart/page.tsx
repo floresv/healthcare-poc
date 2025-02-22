@@ -2,13 +2,8 @@
 
 import { useState, useEffect } from "react";
 import CartSummary from "../components/cart/CartSummary";
+import { CartItem } from "@/types/cart";
 
-interface CartItem {
-  id: number;
-  name: string;
-  quantity: number;
-  price: number;
-}
 
 export default function Page() {
   const [cart, setCart] = useState<CartItem[]>([]);
