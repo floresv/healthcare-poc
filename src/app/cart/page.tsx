@@ -72,7 +72,7 @@ export default function OrderPage() {
       }));
 
       window.location.href = '/cart/checkout';
-    } catch (error) {
+    } catch {
       alert('There was a problem creating the order');
     }
   };

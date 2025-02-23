@@ -7,11 +7,7 @@ export const metadata: Metadata = {
   description: 'View Orders',
 };
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function CategoryPage() {
   return (
     <div className="min-h-screen p-8 sm:p-20">
       <div className="max-w-3xl mx-auto">
