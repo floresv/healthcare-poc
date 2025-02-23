@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { AiFillHome, AiOutlineUser, AiOutlineShoppingCart } from "react-icons/ai";
+import { AiFillHome, AiFillFileText, AiOutlineShoppingCart, AiFillHeart } from "react-icons/ai";
 import CartSummary from "../app/components/cart/CartSummary";
 import { CartItem } from "@/types/cart";
 
@@ -34,8 +34,11 @@ export default function NavBar() {
         </Link>
       </div>
       <div className="flex items-center space-x-4">
-        <Link href="/profile" className="hover:text-blue-600 transition-colors">
-          <AiOutlineUser size={24} />
+        <Link href="/wishlist" className="hover:text-blue-600 transition-colors">
+          <AiFillHeart size={24} />
+        </Link>
+        <Link href="/orders" className="hover:text-blue-600 transition-colors">
+          <AiFillFileText size={24} />
         </Link>
         <button
           onClick={toggleCart}

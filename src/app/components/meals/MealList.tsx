@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineShoppingCart, AiFillHeart } from "react-icons/ai";
 import { Meal, MealListProps } from '@/types/meal';
 import { CartItem } from '@/types/cart';
 
@@ -52,6 +52,10 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
 
     // Optional: Add some visual feedback
     alert(`Added ${meal.name} to cart`);
+    window.location.reload();
+  };
+
+  const addToWishlist = (meal: Meal) => {
   };
 
   useEffect(() => {
@@ -118,14 +122,26 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
                     fill
                     className="object-cover"
                   />
-                  <button 
-                    className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg 
-                              hover:bg-gray-100 transition-colors duration-200 
-                              opacity-90 hover:opacity-100 cursor-pointer"
-                    onClick={() => addToCart(meal)}
-                  >
-                    <AiOutlineShoppingCart className="w-6 h-6 text-gray-800" />
-                  </button>
+                  <div className="absolute bottom-2 left-2 flex space-x-2">
+                    <button 
+                      className="bg-white p-2 rounded-full shadow-lg 
+                                hover:bg-gray-100 transition-colors duration-200 
+                                opacity-90 hover:opacity-100 cursor-pointer"
+                      onClick={() => addToWishlist(meal)}
+                    >
+                      <AiFillHeart className="w-6 h-6 text-gray-800" />
+                    </button>
+                  </div>
+                  <div className="absolute bottom-2 right-2 flex space-x-2">
+                    <button 
+                      className="bg-white p-2 rounded-full shadow-lg 
+                                hover:bg-gray-100 transition-colors duration-200 
+                                opacity-90 hover:opacity-100 cursor-pointer"
+                      onClick={() => addToCart(meal)}
+                    >
+                      <AiOutlineShoppingCart className="w-6 h-6 text-gray-800" />
+                    </button>
+                  </div>
                 </div>
                 <div className="p-4">
                   <h2 className="text-xl font-semibold text-gray-800">{meal.name}</h2>
