@@ -4,13 +4,9 @@ import { useState, useEffect } from 'react';
 import { CartItem } from '@/types/cart';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import CartItemComponent from '../components/cart/CartItem';
-import { validateInputs, createOrder } from '@/utils/orderUtils';
+import { validateInputs, createOrder } from '@/utils/cartUtils';
 
-export default function OrderPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function OrderPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -26,7 +22,7 @@ export default function OrderPage({
     document.title = 'Order Details | 17 Tech FoodApp';
     const metaDescription = document.createElement('meta');
     metaDescription.name = 'description';
-    metaDescription.content = 'View order details';
+    metaDescription.content = 'View cart details';
     document.head.appendChild(metaDescription);
 
     return () => {
@@ -65,10 +61,18 @@ export default function OrderPage({
     }
 
     try {
-      await createOrder(name, email, cart);
+      const orderResponse = await createOrder(name, email, cart);
       alert('Order created successfully');
+      setCart([]);
+      localStorage.removeItem("cart");
+
+      localStorage.setItem("currentOrder", JSON.stringify({
+        orderId: orderResponse.id,
+        buyerName: name
+      }));
+
+      window.location.href = '/cart/checkout';
     } catch (error) {
-      console.error(error);
       alert('There was a problem creating the order');
     }
   };
@@ -76,7 +80,7 @@ export default function OrderPage({
   return (
     <div className="flex m-8">
       <div className="w-3/4 p-8 bg-white shadow-md rounded-lg mr-8">
-        <h1 className="text-2xl font-bold mb-4 text-center text-black">Order Details</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center text-black">Cart Details</h1>
         {cart.length > 0 ? (
           <div className="space-y-6">
             {cart.map((item, index) => (
@@ -128,7 +132,7 @@ export default function OrderPage({
           className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
           onClick={handleCreateOrder}
         >
-          Create Order
+          Checkout
         </button>
       </div>
     </div>

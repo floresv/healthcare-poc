@@ -1,4 +1,3 @@
-import { FaRegTrashAlt } from "react-icons/fa";
 import { CartProps } from "@/types/cart";
 import Link from 'next/link';
 import CartItem from './CartItem';
@@ -49,7 +48,7 @@ export default function CartSummary({ cart, setCart, showCart, toggleCart }: Car
               <span>Total:</span>
               <span>${totalPrice}</span>
             </p>
-            <Link href="/order">
+            <Link href="/cart" onClick={toggleCart}>
               <div className="w-full bg-blue-600 text-white text-center py-2 px-4 rounded hover:bg-blue-700 transition-colors">
                 Place Order
               </div>

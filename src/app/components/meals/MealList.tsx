@@ -55,8 +55,8 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
     window.location.reload();
   };
 
-  const addToWishlist = (meal: Meal) => {
-  };
+  // const addToWishlist = (meal: Meal) => {
+  // };
 
   useEffect(() => {
     const sortBy = ["nameAsc", "nameDesc"].includes(sortCriteria) ? "name" : "price";
