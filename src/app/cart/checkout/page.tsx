@@ -5,7 +5,14 @@ import { processPayment } from '@/utils/cartUtils';
 import PaymentForm from '@/app/components/cart/PaymentForm';
 
 const CheckoutPage: React.FC = () => {
-    const currentOrder = localStorage.getItem("currentOrder");
+    const [currentOrder, setCurrentOrder] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const order = localStorage.getItem("currentOrder");
+            setCurrentOrder(order);
+        }
+    }, []);
 
     if (!currentOrder) {
         return (
@@ -28,7 +35,7 @@ const CheckoutPage: React.FC = () => {
         const cardNumber = (event.target as HTMLFormElement).cardNumber.value;
 
         try {
-            const orderId = JSON.parse(localStorage.getItem("currentOrder") || "{}").orderId;
+            const orderId = JSON.parse(currentOrder).orderId;
             const data = await processPayment(orderId, fullName, cardNumber);
             console.log('Payment processed successfully:', data);
             localStorage.removeItem("currentOrder");
