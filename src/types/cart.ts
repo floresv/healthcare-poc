@@ -13,3 +13,11 @@ export interface CartProps {
     showCart: boolean;
     toggleCart: () => void;
 };
+
+export interface CartItemProps {
+    item: CartItem;
+    index: number;
+    incrementQuantity: (index: number) => void;
+    decrementQuantity: (index: number) => void;
+    removeCartItem: (index: number) => void;
+};
