@@ -95,7 +95,9 @@ function OrderList() {
   const translateOrderState = (state: string): string => {
     switch (state) {
       case 'pending_of_payment':
-        return 'pending';
+        return 'Pending';
+      case 'paid':
+        return 'Paid';
       default:
         return state;
     }
@@ -120,7 +122,7 @@ function OrderList() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4 text-center">Orders</h1>
-      <table className="min-w-full bg-white border border-gray-200">
+      <table className="min-w-full bg-white border border-gray-200 text-black">
         <thead>
           <tr className="bg-gray-100">
             <th className="py-2 px-4 border-b">ID</th>

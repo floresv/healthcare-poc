@@ -38,7 +38,7 @@ export default function RootLayout({
 
         <footer className="p-4 border-t">
           <div>
-            <p className="text-center text-gray-600">© 2024 17 Tech FoodApp. All rights reserved.</p>
+            <p className="text-center text-gray-600">© 2025 - 17 Tech FoodApp. All rights reserved.</p>
           </div>
         </footer>
       </body>

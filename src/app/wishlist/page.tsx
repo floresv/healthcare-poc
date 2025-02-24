@@ -1,17 +1,17 @@
 import { Metadata } from 'next';
-import OrderList from '../components/orders/OrderList';
+import Wishlist from '@/app/components/wishlist/Wishlist';
 
 
 export const metadata: Metadata = {
-  title: 'Orders | 17 Tech FoodApp',
-  description: 'View Orders',
+  title: 'Wishlist | 17 Tech FoodApp',
+  description: 'Wishlist',
 };
 
 export default async function CategoryPage() {
   return (
     <div className="min-h-screen p-8 sm:p-20">
-      <div className="max-w-6xl mx-auto">
-        <OrderList />
+      <div className="max-w-3xl mx-auto">
+        <Wishlist />
       </div>
     </div>
   );

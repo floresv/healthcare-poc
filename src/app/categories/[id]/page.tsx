@@ -32,7 +32,7 @@ export default async function CategoryPage({
 
   return (
     <div className="min-h-screen p-8 sm:p-20">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-3xl mx-auto">
         <CategoryCard category={data.category} />
       </div>
     </div>
