@@ -1,11 +1,9 @@
 "use client";
 
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { AiOutlineShoppingCart, AiFillHeart } from "react-icons/ai";
 import { Meal, MealListProps } from '@/types/meal';
 import { CartItem } from '@/types/cart';
-
+import MealCard from './MealCard';
 
 const sortMeals = (meals: Meal[], criteria: 'nameAsc' | 'nameDesc' | 'priceAsc' | 'priceDesc') => {
   return meals.sort((a, b) => {
@@ -55,9 +53,31 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
     window.location.reload();
   };
 
-  const addToWishlist = (meal: Meal) => {
-    // Logic to add the meal to the wishlist
-    alert(`Added ${meal.name} to wishlist`);
+  const addToWishlist = async (meal: Meal) => {
+    try {
+      const response = await fetch(`${apiEndpoint}/wishlists`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          wishlist: {
+            wishlistable_type: 'Meal',
+            wishlistable_id: meal.id
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add to wishlist');
+      }
+
+      alert(`Added ${meal.name} to wishlist`);
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      alert('Failed to add to wishlist');
+    }
   };
 
   useEffect(() => {
@@ -116,43 +136,12 @@ export default function MealList({ categoryId, sortCriteria }: MealListProps) {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortedMeals.map((meal) => (
-              <div key={meal.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="relative h-48 group">
-                  <Image
-                    src={meal.imageUrl}
-                    alt={meal.name}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute bottom-2 left-2 flex space-x-2">
-                    <button 
-                      className="bg-white p-2 rounded-full shadow-lg 
-                                hover:bg-gray-100 transition-colors duration-200 
-                                opacity-90 hover:opacity-100 cursor-pointer"
-                      onClick={() => addToWishlist(meal)}
-                    >
-                      <AiFillHeart className="w-6 h-6 text-gray-800" />
-                    </button>
-                  </div>
-                  <div className="absolute bottom-2 right-2 flex space-x-2">
-                    <button 
-                      className="bg-white p-2 rounded-full shadow-lg 
-                                hover:bg-gray-100 transition-colors duration-200 
-                                opacity-90 hover:opacity-100 cursor-pointer"
-                      onClick={() => addToCart(meal)}
-                    >
-                      <AiOutlineShoppingCart className="w-6 h-6 text-gray-800" />
-                    </button>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold text-gray-800">{meal.name}</h2>
-                  <div className="mt-2 flex justify-between items-center">
-                    <span className="text-gray-600">Category: {meal.category.name}</span>
-                    <span className="text-green-600 font-bold">{meal.price}</span>
-                  </div>
-                </div>
-              </div>
+              <MealCard
+                key={meal.id}
+                meal={meal}
+                onAddToCart={addToCart}
+                onAddToWishlist={addToWishlist}
+              />
             ))}
           </div>
           <div className="mt-6 flex justify-center gap-4">

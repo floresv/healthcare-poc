@@ -8,13 +8,13 @@ interface PaymentFormProps {
 const PaymentForm: React.FC<PaymentFormProps> = ({ onPay, onCancel }) => (
     <form onSubmit={onPay} className="space-y-6">
         <div className="mb-4">
-            <label htmlFor="fullName" className="block text-gray-700">Nombre Completo:</label>
+            <label htmlFor="fullName" className="block text-gray-700">Full Name:</label>
             <input
                 type="text"
                 id="fullName"
                 name="fullName"
                 required
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded text-black"
                 defaultValue={JSON.parse(localStorage.getItem("currentOrder") || "{}").buyerName || ""}
             />
         </div>
@@ -25,7 +25,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPay, onCancel }) => (
                 id="cardNumber"
                 name="cardNumber"
                 required
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded text-black"
             />
         </div>
         <div className="flex justify-between">
